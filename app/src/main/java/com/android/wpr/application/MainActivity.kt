@@ -24,6 +24,7 @@ class MainActivity : DaggerAppCompatActivity() {
     private lateinit var errorInfo: TextView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var recyclerView: RecyclerView
+    private lateinit var viewAdapter: AppRecyclerViewAdapter
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProvider.Factory
@@ -46,17 +47,22 @@ class MainActivity : DaggerAppCompatActivity() {
 
             }
         }
-        recyclerView=findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView=findViewById<RecyclerView>(R.id.recycler_view).apply {
+            viewAdapter = AppRecyclerViewAdapter()
+            adapter=viewAdapter
+        }
 
         mainActivityViewModel.feedResponseLiveData.observe(this, Observer {
             val result = it ?: return@Observer
+            swipeRefreshLayout.isRefreshing=false
             when (result) {
 
                 is DataResult.Success -> {
                     Log.e("****", result.data.toString())
                     title = result.data.title
-                    errorInfo.text =result.data.toString()
-                    errorInfo.visible()
+                    viewAdapter.updateItem(result.data.rows)
+                    errorInfo.text =""
+                    errorInfo.gone()
 
                 }
                 // error handling
