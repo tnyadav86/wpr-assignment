@@ -1,5 +1,7 @@
 package com.android.wpr.application.util
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.view.View
 import android.widget.ImageView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -37,3 +39,8 @@ fun ImageView.loadImage(url: String?) {
 
 
 }
+val Context.isNetworkConnected: Boolean
+    get() = (getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.activeNetworkInfo?.isConnected == true
+
+
+

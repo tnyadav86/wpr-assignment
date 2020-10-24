@@ -32,9 +32,9 @@ class MainActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        toolbar = findViewById<Toolbar>(R.id.toolbar)
-        progressBar = findViewById<ProgressBar>(R.id.progress_bar)
-        errorInfo = findViewById<TextView>(R.id.error_info)
+        toolbar = findViewById(R.id.toolbar)
+        progressBar = findViewById(R.id.progress_bar)
+        errorInfo = findViewById(R.id.error_info)
         setSupportActionBar(toolbar)
         val mainActivityViewModel = ViewModelProvider(this, viewModelProviderFactory).get(
             MainActivityViewModel::class.java
@@ -66,16 +66,18 @@ class MainActivity : DaggerAppCompatActivity() {
                 }
                 // error handling
                 is DataResult.Error -> {
-
+                    viewAdapter.updateItem(arrayListOf())
+                    errorInfo.visible()
                     when (result.errorCode) {
                         FeedDataErrorCode.DATA_ERROR -> errorInfo.text =
                             getString(R.string.no_data_found)
                         FeedDataErrorCode.API_ERROR -> errorInfo.text =
                             getString(R.string.api_error)
-                        FeedDataErrorCode.INTERNET_CONNECTION_ERROR -> getString(R.string.internet_connection_error)
+                        FeedDataErrorCode.INTERNET_CONNECTION_ERROR -> errorInfo.text =
+                            getString(R.string.internet_connection_error)
 
                     }
-                    errorInfo.visible()
+
                 }
 
             }
@@ -84,11 +86,35 @@ class MainActivity : DaggerAppCompatActivity() {
         mainActivityViewModel.loadingStatus.observe(this, Observer {
             when (it) {
                 true -> {
-                    errorInfo.text=""
+                    errorInfo.text = ""
                     errorInfo.gone()
                     progressBar.visible()
                 }
                 false -> progressBar.gone()
+
+            }
+        })
+
+        // app will try to fetch data if last fetch was not success due to no network connection and network connection is available
+        mainActivityViewModel.networkConnectionLiveData.observe(this, Observer {
+            when (it) {
+                true -> {
+                    Log.e("wp", "connected")
+                    when(val dataResult = mainActivityViewModel.feedResponseLiveData.value){
+                        is DataResult.Error -> {
+                            when (dataResult.errorCode) {
+                                FeedDataErrorCode.INTERNET_CONNECTION_ERROR ->{
+                                    mainActivityViewModel.refreshData(true)
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+                false -> {
+                    Log.e("wp", "not connected")
+                }
 
             }
         })

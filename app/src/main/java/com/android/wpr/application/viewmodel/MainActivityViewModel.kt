@@ -1,17 +1,23 @@
 package com.android.wpr.application.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.*
 import com.android.wpr.application.model.DataRepository
+import com.android.wpr.application.model.NetworkConnectionLiveData
 import com.android.wpr.application.model.data.FeedResponseData
 import com.android.wpr.application.network.DataResult
+import com.android.wpr.application.network.FeedDataErrorCode
+import com.android.wpr.application.util.isNetworkConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainActivityViewModel @Inject constructor(private val dataRepository: DataRepository) : ViewModel() {
+class MainActivityViewModel @Inject constructor(private val dataRepository: DataRepository,private val mApplication:Application) : AndroidViewModel(mApplication) {
+
+    private val _networkConnectionLiveData: NetworkConnectionLiveData = NetworkConnectionLiveData(mApplication)
+    val networkConnectionLiveData: NetworkConnectionLiveData
+        get() = _networkConnectionLiveData
 
     private val _feedResponseLiveData = MutableLiveData<DataResult<FeedResponseData>>()
     val feedResponseLiveData: LiveData<DataResult<FeedResponseData>>
@@ -36,6 +42,23 @@ class MainActivityViewModel @Inject constructor(private val dataRepository: Data
 
         _loadingStatus.value = showLoader
         viewModelScope.launch(Dispatchers.IO) {
+            networkConnectionLiveData.value?.let {isConnected->
+                Log.e("wp vm isConnected",isConnected.toString())
+                if (!isConnected){
+                    _feedResponseLiveData.postValue(DataResult.Error(FeedDataErrorCode.INTERNET_CONNECTION_ERROR))
+                    _loadingStatus.postValue(false)
+                    return@launch
+                }
+            }?: kotlin.run{ // NetworkConnectionLiveData take time to update its value so cross check for network not connected
+                if(!mApplication.isNetworkConnected){
+                    _feedResponseLiveData.postValue(DataResult.Error(FeedDataErrorCode.INTERNET_CONNECTION_ERROR))
+                    _loadingStatus.postValue(false)
+                    return@launch
+                }
+                Log.e("wp viewmodel","networkConnectionLiveData.value is null")
+
+            }
+
             _feedResponseLiveData.postValue(dataRepository.fetchData())
             _loadingStatus.postValue(false)
         }

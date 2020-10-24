@@ -9,7 +9,7 @@ import com.android.wpr.application.util.loadImage
 import kotlinx.android.synthetic.main.item_feed.view.*
 
 
-class AppRecyclerViewAdapter() : RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder>() {
+class AppRecyclerViewAdapter : RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder>() {
 
     private var feedItemList: List<FeedItem> = arrayListOf()
 
