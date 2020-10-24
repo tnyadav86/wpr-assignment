@@ -4,6 +4,7 @@ import android.util.Log
 import com.android.wpr.application.model.data.FeedResponseData
 import com.android.wpr.application.network.ApiService
 import com.android.wpr.application.network.DataResult
+import com.android.wpr.application.network.FeedDataErrorCode
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
@@ -14,13 +15,13 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
             if (response.isSuccessful) {
                 response.body()?.let { feedResponseData ->
                     return DataResult.Success(feedResponseData)
-                } ?: return DataResult.Error("No data found")
+                } ?: return DataResult.Error(FeedDataErrorCode.DATA_ERROR)
             } else {
-                return DataResult.Error("Unable to get data. Please try again later")
+                return DataResult.Error(FeedDataErrorCode.API_ERROR)
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            return DataResult.Error("Unable to get data. Please try again later")
+            return DataResult.Error(FeedDataErrorCode.API_ERROR)
         }
 
     }
