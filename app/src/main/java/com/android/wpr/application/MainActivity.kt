@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.wpr.application.network.DataResult
@@ -48,6 +49,7 @@ class MainActivity : DaggerAppCompatActivity() {
             }
         }
         recyclerView=findViewById<RecyclerView>(R.id.recycler_view).apply {
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             viewAdapter = AppRecyclerViewAdapter()
             adapter=viewAdapter
         }

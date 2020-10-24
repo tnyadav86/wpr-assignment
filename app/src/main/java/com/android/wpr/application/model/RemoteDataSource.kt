@@ -8,7 +8,7 @@ import com.android.wpr.application.network.FeedDataErrorCode
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
-    suspend fun fetchData(): DataResult<FeedResponseData> {
+     fun fetchData(): DataResult<FeedResponseData> {
         Log.e("wp", "Api request started")
         try {
             val response = apiService.fetchDetails().execute()
