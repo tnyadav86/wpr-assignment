@@ -58,7 +58,6 @@ class MainActivity : DaggerAppCompatActivity() {
             when (result) {
 
                 is DataResult.Success -> {
-                    Log.e("****", result.data.toString())
                     title = result.data.title
                     viewAdapter.updateItem(result.data.rows)
                     errorInfo.text =""
