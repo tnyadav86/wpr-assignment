@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection", "SpellCheckingInspection")
+
 package com.android.wpr.application.network
 
 import com.android.wpr.application.model.data.FeedResponseData
