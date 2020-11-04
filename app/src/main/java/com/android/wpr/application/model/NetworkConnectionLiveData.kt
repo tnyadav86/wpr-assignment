@@ -6,13 +6,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import androidx.lifecycle.LiveData
-import com.android.wpr.application.util.isNetworkConnected
+import com.android.wpr.application.util.isNetworkAvailable
 
 class NetworkConnectionLiveData(private val context: Context) : LiveData<Boolean>() {
 
     private val networkReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            postValue(context.isNetworkConnected)
+            postValue(context.isNetworkAvailable())
         }
     }
 

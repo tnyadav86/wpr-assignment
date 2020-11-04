@@ -26,13 +26,22 @@ class AppRecyclerViewAdapter : RecyclerView.Adapter<AppRecyclerViewAdapter.ViewH
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = feedItemList[position]
-        holder.itemView.tvTitle.text = item.title?: "Title not found"
-        holder.itemView.tvDescription.text = item.description?: "Description not found"
-        holder.itemView.image.loadImage(item.imageHref)
+        holder.onBind(item)
+
 
     }
 
     override fun getItemCount(): Int = feedItemList.size
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+
+        fun onBind(item:FeedItem){
+            itemView.apply {
+                tvTitle.text = item.title
+                tvDescription.text = item.description
+                image.loadImage(item.imageHref)
+            }
+
+        }
+    }
 }

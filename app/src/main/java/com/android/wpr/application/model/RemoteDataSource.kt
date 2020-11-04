@@ -15,8 +15,13 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
             if (response.isSuccessful) {
                 response.body()?.let { feedResponseData ->
                     //filtering non null item from list
+//                    feedResponseData.rows =
+//                        feedResponseData.rows.filter { !(it.title == null && it.description == null && it.imageHref == null) }
+
+                    //filtering  item from list only those item which all 3 field are not null
                     feedResponseData.rows =
-                        feedResponseData.rows.filter { !(it.title == null && it.description == null && it.imageHref == null) }
+                        feedResponseData.rows.filter { !(it.title == null || it.description == null || it.imageHref == null) }
+
                     return DataResult.Success(feedResponseData)
                 } ?: return DataResult.Error(FeedDataErrorCode.DATA_ERROR)
             } else {
