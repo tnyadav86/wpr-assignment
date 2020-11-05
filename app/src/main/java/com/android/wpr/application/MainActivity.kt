@@ -69,9 +69,7 @@ class MainActivity : DaggerAppCompatActivity() {
                     swipeRefreshLayout.apply {
                         isRefreshing = false
                     }
-                    title.apply {
-                        result.data.title
-                    }
+                    title=result.data.title
                     viewAdapter.apply {
                         updateItem(result.data.rows)
                     }
@@ -86,8 +84,7 @@ class MainActivity : DaggerAppCompatActivity() {
                         isRefreshing = false
                     }
                     //Show error on UI
-                    var errorMessage = ""
-                    errorMessage = when (result.errorCode) {
+                    val errorMessage: String = when (result.errorCode) {
                         FeedDataErrorCode.DATA_ERROR -> getString(R.string.no_data_found)
                         FeedDataErrorCode.API_ERROR -> getString(R.string.api_error)
                         FeedDataErrorCode.INTERNET_CONNECTION_ERROR -> getString(R.string.internet_connection_error)

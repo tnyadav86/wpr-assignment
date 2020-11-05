@@ -16,8 +16,9 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner  "com.android.wpr.application.di.runner.AppUiRunner"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -34,17 +35,23 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
+    testImplementation 'org.mockito:mockito-core:2.25.0'
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.9.0'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
     androidTestImplementation 'androidx.test:rules:1.3.0'
 
+
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
@@ -53,6 +60,9 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.29.1'
     implementation 'com.google.dagger:dagger-android-support:2.29.1'
     kapt 'com.google.dagger:dagger-android-processor:2.29.1'
+    kaptAndroidTest 'com.google.dagger:dagger-compiler:2.29.1'
+
+
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 
