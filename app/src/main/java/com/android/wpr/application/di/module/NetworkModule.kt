@@ -3,6 +3,8 @@ package com.android.wpr.application.di.module
 
 
 import com.android.wpr.application.network.ApiService
+import com.android.wpr.application.util.DefaultDispatcherProvider
+import com.android.wpr.application.util.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -21,6 +23,14 @@ class NetworkModule {
         return  BASE_URL
 
     }
+// injecting Dispatchers
+    @Provides
+    fun provideDispatchers(): DispatcherProvider{
+        return DefaultDispatcherProvider()
+
+    }
+
+
     @Provides
     fun provideRetrofitService(baseUrl:String): ApiService {
         // Whenever Dagger needs to provide an instance of type ApiService,

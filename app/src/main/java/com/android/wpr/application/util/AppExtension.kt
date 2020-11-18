@@ -10,6 +10,8 @@ import com.android.wpr.application.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 fun View.visible() {
     this.visibility = View.VISIBLE
@@ -61,3 +63,13 @@ fun Context.isNetworkAvailable(): Boolean {
     }
 }
 
+interface DispatcherProvider {
+
+    fun main(): CoroutineDispatcher = Dispatchers.Main
+    fun default(): CoroutineDispatcher = Dispatchers.Default
+    fun io(): CoroutineDispatcher = Dispatchers.IO
+    fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
+
+}
+
+class DefaultDispatcherProvider : DispatcherProvider
